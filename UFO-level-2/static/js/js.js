@@ -30,44 +30,24 @@ data.forEach(obj => {
     });
 });
 
-
-// document.addEventListener('DOMContentLoaded', function(e) {
-//     FormValidation.formValidation(
-//         document.getElementById('form'), {
-//             fields: {
-//                 birthday: {
-//                     validators: {
-//                         date: {
-//                             format: 'D/M/YYYY',
-//                             message: 'The value is not a valid date',
-//                         }
-//                     }
-//                 },
-//             },
-//             plugins: {
-//                 trigger: new FormValidation.plugins.Trigger(),
-//                 bootstrap: new FormValidation.plugins.Bootstrap(),
-//                 submitButton: new FormValidation.plugins.SubmitButton(),
-//                 icon: new FormValidation.plugins.Icon({
-//                     valid: 'fa fa-check',
-//                     invalid: 'fa fa-times',
-//                     validating: 'fa fa-refresh'
-//                 }),
-//             },
-//         }
-//     );
-// });
-
 /////////////////////////////////////////////////////////
 //
 // Search Option Verification
 // 
+// receives data, inputElement from line 118, and dropDownValues from line 123.
+// if option matches known string, select certain data from dataset. return back as inputTypeArray.
+// 
 /////////////////////////////////////////////////////////
+
 function searchOptions(data, inputElement, dropDownValues) {
     var greeting;
     if (inputElement === '') {
         greeting = "Nothing Found.";
         console.log(greeting);
+
+        // Add filter option above input box
+        var noItems = d3.select('tbody');
+        var noItems_applied = noItems.text("No input found. Select a filter and add an input for data.");
         return null;
 
     } else if (dropDownValues == "City") {
@@ -120,11 +100,7 @@ submitButton.on("click", function() {
     var dropDownValues = d3.select('#options').property('value');
     console.log(dropDownValues);
 
-
-
-
-    // use the "field input" to filter the data by "date" only
-    // var inputTypeArray = data.filter(dt => dt.datetime === inputElement);
+    // Search Option Function
     var inputTypeArray = searchOptions(data, inputElement, dropDownValues);
 
     // display in the html file (append it at the end, after displaying all original data)
@@ -135,20 +111,18 @@ submitButton.on("click", function() {
         Object.entries(selection).forEach(([key, value]) => {
             var cell = row.append("td");
 
-            ///////////////////
-            ///////////////////
-
-
             // adds the "value" to each row in the table
             cell.text(value);
         });
+        highlight_row()
     });
 });
 
 
 
-
+/////////////////////////////////////////////////////////
 // Map settings
+//////////////////////////////////////////////////////
 $(document).ready(function() {
     $('#map').usmap({
         'stateStyles': {
@@ -169,129 +143,183 @@ $(document).ready(function() {
 
 
 
-// TEST
-
-
-// function hoverMap() {
-//     // Select table body
-//     myTable = document.getElementsByTagName("tbody")[0];
-//     console.log(myTable);
-//     // now, get all the p elements that are descendants of the body
-//     trs = myTable.getElementsByTagName("tr");
-//     console.log(trs);
-
-//     // now, get all the p elements that are descendants of the body
-//     tds = trs.getElementsByTagName("td");
-//     console.log(tds);
-
-//     // Find the State
-//     state_map = tds[2].textContent;
-//     console.log(state_map);
-//     tds.forEach(obj => {
-//         // for each "element" in the object create a row
-//         // Element includes dict key and values being selected and added to single row.
-//         var tRow = tds[2].textContent;
-//         // "Object" becomes the targetet array (element)
-//         // Entries obtains everything in object and can be looped through with key,value
-//         Object.entries(obj).forEach(([key, value]) => {
-//             // Test key,value
-//             var state_map = tRow;
-//             // Add the "value" to each row in the table
-//             // Calling .text requests the string passing the value of object in tData.
-//             tData.text(state_map);
-//         });
-//     });
-
-
-// // Activate Map
-// $('#map').usmap('trigger', state_map, 'mouseover', event);
-// console.log(state_map)
-// return state_map
-
-// $('#td').mouseover(function(event) {
-//             $('#map').usmap('trigger', 'CA', 'mouseover', event);
-// });
-
-// TEST
-
 ///////////////////////////////////////////////////////
-// Click state in table, highlight state in background
+//  Change search label text when clicking a filter
+// d3
 ///////////////////////////////////////////////////////
 
+// Get events from dropdown selection ( Date )
+d3.selectAll("#date_option").on("click", function() {
 
-
-
-////////////////////////////////////////////////
-// Change search label text when clicking a filter
-// CHANGE THIS TO d3 TAGS IF POSSIBLE .. no $
-////////////////////////////////////////////////
-$('#date_option').click(function(event) {
-    $('#labels')
-        .text('Search by Date:')
-        .stop()
-});
-$('#city_option').click(function(event) {
-    $('#labels')
-        .text('Search by City:')
-        .stop()
-});
-$('#state_option').click(function(event) {
-    $('#labels')
-        .text('Search by State:')
-        .stop()
-});
-
-/////////////////////////////////////////////////
-// end
-
-///// KNON ISSUE:  /////////////
-// After searching a date successfully, and clicking a state value, state hoverout function does not activate.
-///////////////////////////////
-d3.selectAll("tr").on("click", function() {
-    // you can select the element just like any other selection
-    var listItem = d3.select(this);
-    console.log(d3.select('tr'));
-    // listItem.style("color", "blue");
-
-    var listItemText = listItem.text();
+    var x = document.getElementById("datetime").placeholder = '1/1/2010';
+    console.log(x);
+    // Add filter option above input box
+    var listItem = d3.select('#labels');
+    var listItemText = listItem.text("Filtered by Date");
     console.log(listItemText);
 });
 
+// Get events from dropdown selection ( city )
+d3.selectAll("#city_option").on("click", function() {
+
+    var x = document.getElementById("datetime").placeholder = 'el cajon';
+    console.log(x);
+    // Add filter option above input box
+    var listItem = d3.select('#labels');
+    var listItemText = listItem.text("Filtered by City");
+    console.log(listItemText);
+});
+
+// Get events from dropdown selection ( state )
+d3.selectAll("#state_option").on("click", function() {
+
+    var x = document.getElementById("datetime").placeholder = 'ca';
+    console.log(x);
+    // Add filter option above input box
+    var listItem = d3.select('#labels');
+    var listItemText = listItem.text("Filtered by State");
+    console.log(listItemText);
+});
+/////////////////////////////////////////////////
+// end
+
+
+////////////////////////////////////////////////
+// Hover over tr, get td state column, activate hoverover event on map
+// d3/js only
+/////////////////////////////////////////////////
+
+highlight_row();
+// Hover out from state selected
 function releaseHover() {
-    myVar = setTimeout(hoverOut, 2500);
+    myVar = setTimeout(hoverOut, 1500);
 }
 
 // Hover out from state selected
 function hoverOut() {
     // Activate Map
-    $('#map').usmap('trigger', state_, 'mouseout', event);
-    console.log(state_);
+    $('#map').usmap('trigger', state_for_map, 'mouseout', event);
+    console.log(state_for_map);
 };
 
-/////////////////////////////////////////////////
-// Click state column and highlight the map behind
-// CONVERT: To d3 
+function activeMapHover(state_for_map) {
+    $('#map').usmap('trigger', state_for_map, 'mouseover', event);
+    return state_for_map;
+}
+
+
+function highlight_row() {
+    var table = document.getElementById('target-table-display');
+    var cells = table.getElementsByTagName('td');
+
+    for (var i = 0; i < cells.length; i++) {
+        // Take each cell
+        var cell = cells[i];
+        // do something on onclick event for cell
+        cell.onmouseover = function() {
+            // Get the row id where the cell exists
+            var rowId = (this.parentNode.rowIndex) - 1;
+            // console.log(rowId);
+            var rowsNotSelected = table.getElementsByTagName('tr');
+            // console.log(rowsNotSelected);
+            for (var row = 0; row < rowsNotSelected.length; row++) {
+                rowsNotSelected[row].style.backgroundColor = "";
+                rowsNotSelected[row].classList.remove('selected');
+            }
+            var rowSelected = table.getElementsByTagName('tr')[rowId];
+            // rowSelected.style.backgroundColor = "yellow";
+            // rowSelected.className += " selected";
+
+            state_for_map = rowSelected.cells[2].innerHTML;
+            state_for_map_activate = activeMapHover(state_for_map);
+            // msg += '\nThe cell value is: ' + this.innerHTML;
+            console.log(state_for_map);
+            releaseHover(state_for_map);
+        }
+    }
+
+}
 ////////////////////////////////////////////////
-$("tr").ready(function() {
+//end
 
 
-    $("td").click(function() {
+
+///////////////////////////////////////////////////
+// jQuery that has been replaced with d3/js only
+// ////////////////////////////////////////////////
+// // Change search label text when clicking a filter
+// // CHANGE THIS TO d3 TAGS IF POSSIBLE .. no $
+// Updated to D3/JS only above ^^
+// ////////////////////////////////////////////////
+// $('#date_option').click(function(event) {
+//     $('#labels')
+//         .text('Filter by Date:');
+//     // .stop()
+//     $('#datetime')
+//         .text('1/1/2010')
+//         .stop()
+// });
+// $('#city_option').click(function(event) {
+//     $('#labels')
+//         .text('Filter by City:')
+//         .stop()
+// });
+// $('#state_option').click(function(event) {
+//     $('#labels')
+//         .text('Filter by State:')
+//         .stop()
+// });
+
+/////////////////////////////////////////////////
+// end
 
 
-        $(document).on('click', 'td', function() {
-            if ($(this).find('State').length == 0) {
-                state_ = this.innerText
-                    // state_.toUpperCase()
-                console.log(state_);
-
-                $('#map').usmap('trigger', state_, 'mouseover', event);
-                return state_;
-            };
-        });
-        releaseHover();
-    });
-});
+/////////////////////////////////////////////////
+///// Click state column and highlight the map behind
+///// KNON ISSUE:  /////////////
+// After searching a date successfully, and clicking a state value, state hoverout function does not activate.
+///////////////////////////////
 
 
+//     var listItemText = listItem.text();
+//     console.log(listItemText);
+// });
+
+// function releaseHover() {
+//     myVar = setTimeout(hoverOut, 2500);
+// }
+
+// // Hover out from state selected
+// function hoverOut() {
+//     // Activate Map
+//     $('#map').usmap('trigger', state_, 'mouseout', event);
+//     console.log(state_);
+// };
+
+// /////////////////////////////////////////////////
+// // continued from above
+// // Click state column and highlight the map behind
+// // CONVERT: To d3 
+// Converted
+// ////////////////////////////////////////////////
+
+// $("tr").ready(function() {
+
+//     $("td").click(function() {
+
+
+//         $(document).on('click', 'td', function() {
+//             if ($(this).find('State').length == 0) {
+//                 state_ = this.innerText
+//                     // state_.toUpperCase()
+//                 console.log(state_);
+
+//                 $('#map').usmap('trigger', state_, 'mouseover', event);
+//                 return state_;
+//             };
+//         });
+//         releaseHover();
+//     });
+// });
 ////////////////////////////////////////////////
 //end
