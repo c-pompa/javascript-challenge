@@ -31,44 +31,60 @@ data.forEach(obj => {
 });
 
 
-document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-        document.getElementById('form'), {
-            fields: {
-                birthday: {
-                    validators: {
-                        date: {
-                            format: 'D/M/YYYY',
-                            message: 'The value is not a valid date',
-                        }
-                    }
-                },
-            },
-            plugins: {
-                trigger: new FormValidation.plugins.Trigger(),
-                bootstrap: new FormValidation.plugins.Bootstrap(),
-                submitButton: new FormValidation.plugins.SubmitButton(),
-                icon: new FormValidation.plugins.Icon({
-                    valid: 'fa fa-check',
-                    invalid: 'fa fa-times',
-                    validating: 'fa fa-refresh'
-                }),
-            },
-        }
-    );
-});
+// document.addEventListener('DOMContentLoaded', function(e) {
+//     FormValidation.formValidation(
+//         document.getElementById('form'), {
+//             fields: {
+//                 birthday: {
+//                     validators: {
+//                         date: {
+//                             format: 'D/M/YYYY',
+//                             message: 'The value is not a valid date',
+//                         }
+//                     }
+//                 },
+//             },
+//             plugins: {
+//                 trigger: new FormValidation.plugins.Trigger(),
+//                 bootstrap: new FormValidation.plugins.Bootstrap(),
+//                 submitButton: new FormValidation.plugins.SubmitButton(),
+//                 icon: new FormValidation.plugins.Icon({
+//                     valid: 'fa fa-check',
+//                     invalid: 'fa fa-times',
+//                     validating: 'fa fa-refresh'
+//                 }),
+//             },
+//         }
+//     );
+// });
 
 /////////////////////////////////////////////////////////
-// Verify input field 
-///////////////////////////////////////////////////////
-function myFunction(data, inputElement) {
+//
+// Search Option Verification
+// 
+/////////////////////////////////////////////////////////
+function searchOptions(data, inputElement, dropDownValues) {
     var greeting;
-    if (inputElement === 'undefined') {
+    if (inputElement === '') {
         greeting = "Nothing Found.";
         console.log(greeting);
         return null;
 
-    } else if (typeof inputElement == "string") {
+    } else if (dropDownValues == "City") {
+        // var inputTypeArray;
+        var inputTypeArray = data.filter(dt => dt.city === inputElement);
+        greeting = `Found ${inputTypeArray.length} items.`;
+        document.getElementById("results").innerHTML = greeting;
+        console.log(greeting, inputTypeArray);
+        return inputTypeArray;
+    } else if (dropDownValues == "State") {
+        // var inputTypeArray;
+        var inputTypeArray = data.filter(dt => dt.state === inputElement);
+        greeting = `Found ${inputTypeArray.length} items.`;
+        document.getElementById("results").innerHTML = greeting;
+        console.log(greeting, inputTypeArray);
+        return inputTypeArray;
+    } else if (dropDownValues == "Date") {
         // var inputTypeArray;
         var inputTypeArray = data.filter(dt => dt.datetime === inputElement);
         greeting = `Found ${inputTypeArray.length} items.`;
@@ -79,8 +95,8 @@ function myFunction(data, inputElement) {
         greeting = `Keep trying to fix this: ${inputElement}`;
         console.log(greeting);
         return null;
-    }
-}
+    };
+};
 
 //////////////////////////////////////////////////////////
 // Events, Filtering, Refreshing the page.
@@ -101,9 +117,15 @@ submitButton.on("click", function() {
     console.log(`You have searched for ${inputElement}`);
 
 
+    var dropDownValues = d3.select('#options').property('value');
+    console.log(dropDownValues);
+
+
+
+
     // use the "field input" to filter the data by "date" only
     // var inputTypeArray = data.filter(dt => dt.datetime === inputElement);
-    var inputTypeArray = myFunction(data, inputElement);
+    var inputTypeArray = searchOptions(data, inputElement, dropDownValues);
 
     // display in the html file (append it at the end, after displaying all original data)
     inputTypeArray.forEach((selection) => {
@@ -207,7 +229,22 @@ function hoverOut() {
     console.log(state_);
 };
 
+///// FIX LATER /////////////
+d3.selectAll("tr").on("click", function() {
+    // you can select the element just like any other selection
+    var listItem = d3.select(this);
+    console.log(d3.select('tr:nthChild'));
+    // listItem.style("color", "blue");
+
+    var listItemText = listItem.text();
+    console.log(listItemText);
+});
+
+
+/////////////////////////////////////////////////
 // Click state column and highlight the map behind
+// CONVERT: To d3 
+////////////////////////////////////////////////
 $("tr").ready(function() {
     $("td").click(function() {
 
@@ -216,56 +253,39 @@ $("tr").ready(function() {
             if ($(this).find('State').length == 0) {
                 state_ = this.innerText
                     // state_.toUpperCase()
-                console.log(state_)
+                console.log(state_);
 
                 $('#map').usmap('trigger', state_, 'mouseover', event);
-                return state_
-
+                return state_;
             };
-
-            // hoverOut(state_)
-
-
         });
         releaseHover();
     });
 });
+
+
 ////////////////////////////////////////////////
 //end
 
 ////////////////////////////////////////////////
 // Change search label text when clicking a filter
+// CHANGE THIS TO d3 TAGS IF POSSIBLE .. no $$
 ////////////////////////////////////////////////
-$('#date_filter1').click(function(event) {
+$('#date_option').click(function(event) {
     $('#labels')
         .text('Search by Date:')
         .stop()
 });
-// $('#date_filter1').click(function(event) {
-//     $('#labels')
-//         .text('Search by City:')
-//         .stop()
-// });
-// $('#date_filter1').click(function(event) {
-//     $('#labels')
-//         .text('Search by State:')
-//         .stop()
-// });
-// $('#date_filter1').click(function(event) {
-//     $('#labels')
-//         .text('Search by Country:')
-//         .stop()
-// });
-// $('#date_filter1').click(function(event) {
-//     $('#labels')
-//         .text('Search by Shape:')
-//         .stop()
-// });
-// $('#date_filter1').click(function(event) {
-//     $('#labels')
-//         .text('Search by Duration:')
-//         .stop()
-// });
+$('#city_option').click(function(event) {
+    $('#labels')
+        .text('Search by City:')
+        .stop()
+});
+$('#state_option').click(function(event) {
+    $('#labels')
+        .text('Search by State:')
+        .stop()
+});
 
 /////////////////////////////////////////////////
 // end

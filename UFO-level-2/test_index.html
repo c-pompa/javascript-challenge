@@ -56,42 +56,20 @@
                             </ul>
                         </div>
 
-
-
                 </div>
                 <!-- Filters for Search -->
                 <div class="col-sm-3 search-filters">
                     <button id="filter-btn-date" type="submit" class="btn btn-default ">Search</button>
-
+                    <button id="filter-btn-date" type="submit" class="btn btn-default ">Reload</button>
+                    <!--  Drop Down Options -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filters</a>
-                        <div class="dropdown-menu">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="date_filter" id="date_filter1" value="option1">
-                                <label class="form-check-label" for="date_filter1">Date</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" disabled>
-                                <label class="form-check-label" for="exampleRadios2">City</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-                                <label class="form-check-label" for="exampleRadios3">State</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4" disabled>
-                                <label class="form-check-label" for="exampleRadios4">Country</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios5" value="option5" disabled>
-                                <label class="form-check-label" for="exampleRadios5">Shape</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios6" value="option6" disabled>
-                                <label class="form-check-label" for="exampleRadios6">Duration</label>
-                            </div>
+                        <!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filters</a> -->
+                        <select id="options" name="optionList" form="form">
+                            <option id="date_option" value="Date">Date</option>
+                            <option id="city_option" value="City">City</option>
+                            <option id="state_option" value="State">State</option>
+                          </select>
 
-                        </div>
                     </li>
                 </div>
                 </form>
