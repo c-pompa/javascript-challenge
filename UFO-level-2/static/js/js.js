@@ -218,8 +218,47 @@ $(document).ready(function() {
 // Click state in table, highlight state in background
 ///////////////////////////////////////////////////////
 
+
+
+
+////////////////////////////////////////////////
+// Change search label text when clicking a filter
+// CHANGE THIS TO d3 TAGS IF POSSIBLE .. no $
+////////////////////////////////////////////////
+$('#date_option').click(function(event) {
+    $('#labels')
+        .text('Search by Date:')
+        .stop()
+});
+$('#city_option').click(function(event) {
+    $('#labels')
+        .text('Search by City:')
+        .stop()
+});
+$('#state_option').click(function(event) {
+    $('#labels')
+        .text('Search by State:')
+        .stop()
+});
+
+/////////////////////////////////////////////////
+// end
+
+///// KNON ISSUE:  /////////////
+// After searching a date successfully, and clicking a state value, state hoverout function does not activate.
+///////////////////////////////
+d3.selectAll("tr").on("click", function() {
+    // you can select the element just like any other selection
+    var listItem = d3.select(this);
+    console.log(d3.select('tr'));
+    // listItem.style("color", "blue");
+
+    var listItemText = listItem.text();
+    console.log(listItemText);
+});
+
 function releaseHover() {
-    myVar = setTimeout(hoverOut, 1500);
+    myVar = setTimeout(hoverOut, 2500);
 }
 
 // Hover out from state selected
@@ -229,23 +268,13 @@ function hoverOut() {
     console.log(state_);
 };
 
-///// FIX LATER /////////////
-d3.selectAll("tr").on("click", function() {
-    // you can select the element just like any other selection
-    var listItem = d3.select(this);
-    console.log(d3.select('tr:nthChild'));
-    // listItem.style("color", "blue");
-
-    var listItemText = listItem.text();
-    console.log(listItemText);
-});
-
-
 /////////////////////////////////////////////////
 // Click state column and highlight the map behind
 // CONVERT: To d3 
 ////////////////////////////////////////////////
 $("tr").ready(function() {
+
+
     $("td").click(function() {
 
 
@@ -266,26 +295,3 @@ $("tr").ready(function() {
 
 ////////////////////////////////////////////////
 //end
-
-////////////////////////////////////////////////
-// Change search label text when clicking a filter
-// CHANGE THIS TO d3 TAGS IF POSSIBLE .. no $$
-////////////////////////////////////////////////
-$('#date_option').click(function(event) {
-    $('#labels')
-        .text('Search by Date:')
-        .stop()
-});
-$('#city_option').click(function(event) {
-    $('#labels')
-        .text('Search by City:')
-        .stop()
-});
-$('#state_option').click(function(event) {
-    $('#labels')
-        .text('Search by State:')
-        .stop()
-});
-
-/////////////////////////////////////////////////
-// end
